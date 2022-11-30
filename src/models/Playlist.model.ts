@@ -1,3 +1,5 @@
+import { model, models, Schema } from "mongoose";
+import { DEFAULT_CARD_COLOR } from "~/config/common.config";
 export interface PlaylistModel {
   color?: string;
   name: string;
@@ -8,3 +10,17 @@ export interface PlaylistModel {
 }
 
 export type PlaylistModelWithId = PlaylistModel & { id: string };
+
+//document data structure
+const schema = new Schema<PlaylistModel>({
+  color : { type: String, default: DEFAULT_CARD_COLOR},
+  name : { type: String, required: true},
+  owner : { type: String, required: true},
+  slug : { type: String, required: true},
+  spotifyId : { type: String, required: true},
+  upvote : { type: Number, required: true},
+});
+
+//if model Playlist already have existed, don't create new
+const Playlist = models.Playlist || model<PlaylistModel>("Playlist", schema); //create new model , base on schema
+export default Playlist; 
